@@ -1,61 +1,62 @@
-#ifndef BOOK_H   // Start of include guard: prevents this file from being included more than once
-#define BOOK_H   // Defines BOOK_H so it won’t be included again if already defined
+#ifndef BOOK_H   // This prevents the file from being included multiple times in one compilation
+#define BOOK_H   // Defines BOOK_H to control this include guard
 
-#include <iostream>   // Allows input and output operations (e.g., cout, cin)
-#include <string>     // Allows usage of the string data type
-using namespace std;  // So we don’t need to write std:: every time
+#include <iostream>   // Allows input and output commands (e.g., cout and cin)
+#include <string>     // Enables the use of the string data type
+using namespace std;  // So we don't need to write "std::" before string or cout
 
 // This class represents a book in the library system
 class Book {
-private:  // Private attributes – only accessible within this class
+private:  // These variables can only be accessed from inside this class
+
     string title;       // Stores the title of the book
-    string author;      // Stores the author of the book
-    string isbn;        // Stores the unique ISBN identifier of the book
-    bool available;     // True if the book is available, false if it’s already borrowed
+    string author;      // Stores the author's name
+    string isbn;        // Stores the ISBN, which is a unique code for the book
+    bool available;     // True if the book is available, false if it's borrowed
 
-public:  // Public methods – can be accessed from outside the class
+public:  // These functions can be accessed from outside the class (for example, from main)
 
-    // Assigns values to the book's attributes
+    // This function sets the details of the book (title, author, ISBN)
     void setBookDetails(string t, string a, string i) {
-        title = t;
-        author = a;
-        isbn = i;
-        available = true;  // By default, the book is available when added
+        title = t;        // Assigns the title
+        author = a;       // Assigns the author
+        isbn = i;         // Assigns the ISBN
+        available = true; // When a book is created, it's marked as available
     }
 
-    // Displays all the book’s details, including availability status
+    // This function displays the book's details on the screen
     void displayBookDetails() {
-        cout << "Title: " << title << endl;
-        cout << "Author: " << author << endl;
-        cout << "ISBN: " << isbn << endl;
+        cout << "Title: " << title << endl;     // Shows the title
+        cout << "Author: " << author << endl;   // Shows the author
+        cout << "ISBN: " << isbn << endl;       // Shows the ISBN
 
-        // Shows a visual flag depending on availability
+        // This part checks if the book is available or borrowed and shows a message with a symbol
         if (available) {
-            cout << "Availability: Available ✅" << endl;
+            cout << "Availability: Available ✅" << endl;  // If available, show green check
         } else {
-            cout << "Availability: Borrowed ❌" << endl;
+            cout << "Availability: Borrowed ❌" << endl;   // If borrowed, show red X
         }
     }
 
-    // Attempts to borrow the book, only if it’s currently available
+    // This function tries to borrow the book
     bool borrowBook() {
-        if (available) {
-            available = false;  // Marks the book as borrowed
-            return true;        // Borrow successful
+        if (available) {             // If the book is available
+            available = false;       // Change its status to borrowed
+            return true;             // Return true to show it worked
         } else {
-            return false;       // Book is already borrowed
+            return false;            // If not available, return false
         }
     }
 
-    // Returns the book and marks it as available again
+    // This function marks the book as returned (available again)
     void returnBook() {
-        available = true;
+        available = true;            // Set the book as available again
     }
 
-    // Returns the book’s ISBN – useful for search comparisons
+    // This function gives access to the ISBN so it can be checked elsewhere
     string getISBN() {
-        return isbn;
+        return isbn;                 // Returns the ISBN for comparison
     }
 };
 
-#endif  // End of include guard
+#endif  // This ends the include guard started at the top

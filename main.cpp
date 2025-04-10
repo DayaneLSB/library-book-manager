@@ -14,38 +14,44 @@ int main() {
     library[3].setBookDetails("1984", "George Orwell", "444");
     library[4].setBookDetails("Captains of the Sands", "Jorge Amado", "555");
 
+    // Optional: simulate some books already borrowed
+    library[1].borrowBook();  // The Little Prince is already borrowed
+    library[4].borrowBook();  // Captains of the Sands is already borrowed
+
     string inputISBN;  // A variable to store the ISBN entered by the user
 
     // This loop keeps running until the user types "0" to exit
     while (true) {
         // Ask the user to type the ISBN of the book they want to borrow
         cout << "\nEnter ISBN to borrow a book (or '0' to exit): ";
-        cin >> inputISBN;  // Save the user's input into inputISBN
+        cin >> inputISBN;
 
         // If the user typed "0", we stop the program
         if (inputISBN == "0") {
             cout << "Exiting system. Thank you!" << endl;
-            break;  // Leave the while loop and end the program
+            break;  // Exit the loop and end the program
         }
 
         bool found = false;  // This will track if we found the book or not
 
         // Loop through each book in the library
         for (int i = 0; i < 5; i++) {
-            // Compare the entered ISBN with the book's ISBN
+            // Check if the current book's ISBN matches the one entered
             if (library[i].getISBN() == inputISBN) {
-                found = true;  // Mark that we found a book with that ISBN
+                found = true;  // A matching book was found
 
-                // Try to borrow the book
-                if (library[i].borrowBook()) {
+                // First, display the book's current status
+                library[i].displayBookDetails();
+
+                // Then, try to borrow the book if it's available
+                if (library[i].isAvailable()) {
+                    library[i].borrowBook();
                     cout << "Book successfully borrowed!" << endl;
                 } else {
                     cout << "Sorry, this book is already borrowed." << endl;
                 }
 
-                // Show the current details of the book (including ✅ or ❌)
-                library[i].displayBookDetails();
-                break;  // Stop the loop since we already found the book
+                break;  // Stop searching after finding the book
             }
         }
 
@@ -55,5 +61,5 @@ int main() {
         }
     }
 
-    return 0;  // Return 0 means the program ended without errors
+    return 0;  // Ends the program successfully
 }

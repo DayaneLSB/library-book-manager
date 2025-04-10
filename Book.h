@@ -24,6 +24,11 @@ public:  // These functions can be accessed from outside the class (for example,
         available = true; // When a book is created, it's marked as available
     }
 
+    // ✅ New method to check if the book is available
+    bool isAvailable() {
+        return available;  // Returns the current availability status
+    }
+
     // This function displays the book's details on the screen
     void displayBookDetails() {
         cout << "Title: " << title << endl;     // Shows the title

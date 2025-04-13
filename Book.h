@@ -1,67 +1,112 @@
-#ifndef BOOK_H   // This prevents the file from being included multiple times in one compilation
-#define BOOK_H   // Defines BOOK_H to control this include guard
+#ifndef BOOK_H   // Prevent this file from being included more than once
+#define BOOK_H
 
-#include <iostream>   // Allows input and output commands (e.g., cout and cin)
-#include <string>     // Enables the use of the string data type
-using namespace std;  // So we don't need to write "std::" before string or cout
+#include <iostream>   // Required for cout and cin
+#include <string>     // Allows the use of string data type
+using namespace std;  // So we don’t have to write std:: before string, cout, etc.
 
-// This class represents a book in the library system
+// -------------------------------------------
+// BASE CLASS: Book (general attributes shared by all types of books)
+// -------------------------------------------
 class Book {
-private:  // These variables can only be accessed from inside this class
+protected:  // 'protected' allows child classes to access these attributes
+    string title;         // Book title
+    string author;        // Book author
+    string isbn;          // Unique ISBN identifier
+    bool available;       // True if available, false if borrowed
 
-    string title;       // Stores the title of the book
-    string author;      // Stores the author's name
-    string isbn;        // Stores the ISBN, which is a unique code for the book
-    bool available;     // True if the book is available, false if it's borrowed
-
-public:  // These functions can be accessed from outside the class (for example, from main)
-
-    // This function sets the details of the book (title, author, ISBN)
+public:
+    // Set the main details of a book
     void setBookDetails(string t, string a, string i) {
-        title = t;        // Assigns the title
-        author = a;       // Assigns the author
-        isbn = i;         // Assigns the ISBN
-        available = true; // When a book is created, it's marked as available
+        title = t;
+        author = a;
+        isbn = i;
+        available = true;  // A new book starts as available
     }
 
-    // ✅ New method to check if the book is available
+    // Returns the availability status (used in main)
     bool isAvailable() {
-        return available;  // Returns the current availability status
+        return available;
     }
 
-    // This function displays the book's details on the screen
-    void displayBookDetails() {
-        cout << "Title: " << title << endl;     // Shows the title
-        cout << "Author: " << author << endl;   // Shows the author
-        cout << "ISBN: " << isbn << endl;       // Shows the ISBN
-
-        // This part checks if the book is available or borrowed and shows a message with a symbol
-        if (available) {
-            cout << "Availability: Available ✅" << endl;  // If available, show green check
-        } else {
-            cout << "Availability: Borrowed ❌" << endl;   // If borrowed, show red X
-        }
-    }
-
-    // This function tries to borrow the book
-    bool borrowBook() {
-        if (available) {             // If the book is available
-            available = false;       // Change its status to borrowed
-            return true;             // Return true to show it worked
-        } else {
-            return false;            // If not available, return false
-        }
-    }
-
-    // This function marks the book as returned (available again)
-    void returnBook() {
-        available = true;            // Set the book as available again
-    }
-
-    // This function gives access to the ISBN so it can be checked elsewhere
+    // Returns the book's ISBN so it can be compared in main
     string getISBN() {
-        return isbn;                 // Returns the ISBN for comparison
+        return isbn;
+    }
+
+    // Borrows the book if available
+    bool borrowBook() {
+        if (available) {
+            available = false;  // Mark as borrowed
+            return true;
+        } else {
+            return false;       // Already borrowed
+        }
+    }
+
+    // Return the book to make it available again
+    void returnBook() {
+        available = true;
+    }
+
+    // Display the book details (can be overridden by child classes)
+    virtual void displayBookDetails() {
+        cout << "Title: " << title << endl;
+        cout << "Author: " << author << endl;
+        cout << "ISBN: " << isbn << endl;
+
+        if (available) {
+            cout << "Availability: Available ✅" << endl;
+        } else {
+            cout << "Availability: Borrowed ❌" << endl;
+        }
     }
 };
 
-#endif  // This ends the include guard started at the top
+// -------------------------------------------
+// SUBCLASS: HardcopyBook (physical books)
+// -------------------------------------------
+class HardcopyBook : public Book {
+private:
+    int copies;             // Number of physical copies
+    string shelfNumber;     // Shelf location in the library
+
+public:
+    // Set the specific details for a hardcopy book
+    void setHardcopyDetails(int c, string shelf) {
+        copies = c;
+        shelfNumber = shelf;
+    }
+
+    // Override the display method to show additional details
+    void displayBookDetails() override {
+        Book::displayBookDetails();  // Call the base class version first
+        cout << "Copies: " << copies << endl;
+        cout << "Shelf Number: " << shelfNumber << endl;
+    }
+};
+
+// -------------------------------------------
+// SUBCLASS: EBook (digital books)
+// -------------------------------------------
+class EBook : public Book {
+private:
+    string downloadLink;     // Link where the book can be downloaded
+    string endLicenseDate;   // When the license for this book expires
+
+public:
+    // Set specific details for an e-book
+    void setEBookDetails(string link, string endDate) {
+        downloadLink = link;
+        endLicenseDate = endDate;
+    }
+
+    // Override the display method to show additional details
+    void displayBookDetails() override {
+        Book::displayBookDetails();  // Show the common book info first
+        cout << "Download Link: " << downloadLink << endl;
+        cout << "License Ends On: " << endLicenseDate << endl;
+    }
+};
+
+#endif  // End of include guard

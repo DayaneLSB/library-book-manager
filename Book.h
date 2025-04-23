@@ -1,127 +1,138 @@
-#ifndef BOOK_H   // This prevents the file from being included more than once by mistake
+#ifndef BOOK_H   // Header guard to prevent multiple inclusions
 #define BOOK_H
 
-#include <iostream>   // Allows us to use cout (print to screen) and cin (get user input)
-#include <string>     // Allows us to use the "string" data type (for text)
-using namespace std;  // So we can write cout and string without writing "std::" before
+#include <iostream>   // Enables use of input/output commands like cout
+#include <string>     // Allows use of the string data type
+using namespace std;  // Avoids needing std:: prefix
 
 // =============================
 // CLASS: Book (Base class)
-// A class is like a blueprint. We use it to create objects (in this case, books).
+// Represents a general book with title, author, ISBN, and availability status
 // =============================
 class Book {
 protected:
-    // These are attributes (variables) that every book has
-    string title;       // The book's title
-    string author;      // The book's author
-    string isbn;        // A unique code to identify the book
-    bool available;     // True if the book is available, false if borrowed
+    string title;       // Title of the book
+    string author;      // Author of the book
+    string isbn;        // Unique code to identify the book (ISBN)
+    bool available;     // True = book is available; False = book is borrowed
 
 public:
+    // Constructor to initialize title and author
+    Book(string t, string a) {
+        title = t;
+        author = a;
+        isbn = "";
+        available = true;  // New books are available by default
+    }
+
+    // Default constructor (used when creating book object without initial values)
+    Book() {
+        title = "";
+        author = "";
+        isbn = "";
+        available = true;
+    }
+
     // FUNCTION: setBookDetails
-    // A function is a block of code that performs a task.
-    // This function sets the basic information about the book.
+    // Sets the values for title, author, and ISBN
     void setBookDetails(string t, string a, string i) {
         title = t;
         author = a;
         isbn = i;
-        available = true;  // When a book is created, it's available by default
+        available = true;
     }
 
     // FUNCTION: isAvailable
-    // This function returns true if the book is available
+    // Returns true if the book is not borrowed
     bool isAvailable() {
         return available;
     }
 
     // FUNCTION: getISBN
-    // This function returns the ISBN number of the book
+    // Returns the book's ISBN so we can search books by this ID
     string getISBN() {
         return isbn;
     }
 
+    // FUNCTION: getTitle
+    // Returns the book's title (used for sorting and comparing)
+    string getTitle() {
+        return title;
+    }
+
     // FUNCTION: borrowBook
-    // This function is used to borrow a book (change status to "borrowed")
+    // Marks the book as borrowed if it is available
     bool borrowBook() {
         if (available) {
-            available = false;  // Mark as borrowed
-            return true;        // Borrowing succeeded
+            available = false;
+            return true;
         } else {
-            return false;       // Book was already borrowed
+            return false;  // Book is already borrowed
         }
     }
 
     // FUNCTION: returnBook
-    // This function marks the book as available again
+    // Marks the book as available again
     void returnBook() {
         available = true;
     }
 
     // FUNCTION: displayBookDetails
-    // This function prints all the information about the book
-    // It can be "overridden" by child classes (like EBook or HardcopyBook)
+    // Displays basic book details; can be overridden by child classes
     virtual void displayBookDetails() {
         cout << "Title: " << title << endl;
         cout << "Author: " << author << endl;
         cout << "ISBN: " << isbn << endl;
-        if (available) {
-            cout << "Availability: Available ✅" << endl;
-        } else {
-            cout << "Availability: Borrowed ❌" << endl;
-        }
+        cout << "Availability: " << (available ? "Available ✅" : "Borrowed ❌") << endl;
     }
 };
 
 // =============================
-// CLASS: HardcopyBook (Child of Book)
-// This class adds extra details for physical books (like shelf number)
+// CLASS: HardcopyBook (Derived from Book)
+// Represents a physical book, with number of copies and shelf location
 // =============================
 class HardcopyBook : public Book {
 private:
-    int copies;           // Number of physical copies in the library
-    string shelfNumber;   // Where the book is placed on the shelf
+    int copies;           // How many copies are in the library
+    string shelfNumber;   // Shelf location of the book
 
 public:
-    // FUNCTION: setHardcopyDetails
-    // Sets specific details for physical books
+    // Sets values specific to physical books
     void setHardcopyDetails(int c, string shelf) {
         copies = c;
         shelfNumber = shelf;
     }
 
-    // FUNCTION: displayBookDetails
-    // This overrides the base function to show more information
+    // Overrides base method to show more details for hardcopy books
     void displayBookDetails() override {
-        Book::displayBookDetails();  // Call the function from the parent class
+        Book::displayBookDetails();  // Show basic details
         cout << "Copies: " << copies << endl;
         cout << "Shelf Number: " << shelfNumber << endl;
     }
 };
 
 // =============================
-// CLASS: EBook (Child of Book)
-// This class adds extra details for digital books (like download link)
+// CLASS: EBook (Derived from Book)
+// Represents a digital book with download link and expiration
 // =============================
 class EBook : public Book {
 private:
-    string downloadLink;     // Where the book can be downloaded from
-    string endLicenseDate;   // When the download license expires
+    string downloadLink;     // URL to download the book
+    string endLicenseDate;   // Date when license expires
 
 public:
-    // FUNCTION: setEBookDetails
-    // Sets specific details for eBooks
+    // Sets values specific to digital books
     void setEBookDetails(string link, string endDate) {
         downloadLink = link;
         endLicenseDate = endDate;
     }
 
-    // FUNCTION: displayBookDetails
-    // This overrides the base function to show more information
+    // Overrides base method to include eBook-specific information
     void displayBookDetails() override {
-        Book::displayBookDetails();  // Call the function from the parent class
+        Book::displayBookDetails();  // Show basic details
         cout << "Download Link: " << downloadLink << endl;
         cout << "License Ends On: " << endLicenseDate << endl;
     }
 };
 
-#endif  // End of file protection
+#endif  // End of header guard

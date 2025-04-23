@@ -4,34 +4,26 @@ using namespace std;
 
 // =============================
 // CLASS: Book
-// Represents a book with basic attributes and functionality
 // =============================
 class Book {
 protected:
-    string title;        // Book title
-    string author;       // Book author
-    string isbn;         // Unique book code (ISBN)
-    bool available;      // True if available, false if borrowed
-    string dateAdded;    // Date the book was added to the system
+    string title;
+    string author;
+    string isbn;
+    bool available;
+    string dateAdded;
 
 public:
-    // CONSTRUCTOR: Initializes the book with all values
+    // CONSTRUCTOR: Initializes a book with values
     Book(string t, string a, string i, string av, string d) {
         title = t;
         author = a;
         isbn = i;
         dateAdded = d;
-
-        // Converts availability string to boolean
-        if (av == "Available") {
-            available = true;
-        } else {
-            available = false;
-        }
+        available = (av == "Available");
     }
 
-    // FUNCTION: displayBookDetails
-    // Displays all the book details on the screen
+    // FUNCTION: Displays all details of a book
     void displayBookDetails() {
         cout << "Title: " << title << endl;
         cout << "Author: " << author << endl;
@@ -42,55 +34,71 @@ public:
 };
 
 // =============================
-// MAIN FUNCTION
+// MAIN FUNCTION WITH MENU
 // =============================
 int main() {
-    // ==========================================
-    // ARRAY 1: BOOKS IN ASCENDING ORDER (A to Z)
-    // ==========================================
+    // === ARRAYS WITH PRESET BOOK ORDERINGS ===
     Book* ascending[3] = {
         new Book("Dom Casmurro", "Machado de Assis", "111", "Available", "20/01/2024"),
         new Book("Harry Potter", "J.K. Rowling", "333", "Borrowed", "15/06/2021"),
         new Book("The Little Prince", "Saint-Exupéry", "222", "Available", "25/08/2023")
     };
 
-    // ==========================================
-    // ARRAY 2: BOOKS IN DESCENDING ORDER (Z to A)
-    // ==========================================
     Book* descending[3] = {
         new Book("The Little Prince", "Saint-Exupéry", "222", "Available", "25/08/2023"),
         new Book("Harry Potter", "J.K. Rowling", "333", "Borrowed", "15/06/2021"),
         new Book("Dom Casmurro", "Machado de Assis", "111", "Available", "20/01/2024")
     };
 
-    // ==========================================
-    // ARRAY 3: BOOKS IN MIXED ORDER (as requested)
-    // Harry, The Little, Dom
-    // ==========================================
     Book* mixed[3] = {
         new Book("Harry Potter", "J.K. Rowling", "333", "Borrowed", "15/06/2021"),
         new Book("The Little Prince", "Saint-Exupéry", "222", "Available", "25/08/2023"),
         new Book("Dom Casmurro", "Machado de Assis", "111", "Available", "20/01/2024")
     };
 
-    // Display books in ASCENDING order (as added)
-    cout << "=== BOOKS IN ASCENDING ORDER ===" << endl;
-    for (int i = 0; i < 3; i++) {
-        ascending[i]->displayBookDetails();
-    }
+    int option;
 
-    // Display books in DESCENDING order (as added)
-    cout << "=== BOOKS IN DESCENDING ORDER ===" << endl;
-    for (int i = 0; i < 3; i++) {
-        descending[i]->displayBookDetails();
-    }
+    // === MENU LOOP ===
+    do {
+        cout << "======= BOOK DISPLAY MENU =======" << endl;
+        cout << "1. Show books in Ascending order " << endl;
+        cout << "2. Show books in Descending order " << endl;
+        cout << "3. Show books in Mixed order " << endl;
+        cout << "4. Exit" << endl;
+        cout << "Choose an option (1-4): ";
+        cin >> option;
 
-    // Display books in MIXED order (as added: Harry, The Little, Dom)
-    cout << "=== BOOKS IN MIXED ORDER ===" << endl;
-    for (int i = 0; i < 3; i++) {
-        mixed[i]->displayBookDetails();
-    }
+        switch (option) {
+            case 1:
+                cout << "\n=== BOOKS IN ASCENDING ORDER ===" << endl;
+                for (int i = 0; i < 3; i++) {
+                    ascending[i]->displayBookDetails();
+                }
+                break;
 
-    return 0;  // End of the program
+            case 2:
+                cout << "\n=== BOOKS IN DESCENDING ORDER ===" << endl;
+                for (int i = 0; i < 3; i++) {
+                    descending[i]->displayBookDetails();
+                }
+                break;
+
+            case 3:
+                cout << "\n=== BOOKS IN MIXED ORDER ===" << endl;
+                for (int i = 0; i < 3; i++) {
+                    mixed[i]->displayBookDetails();
+                }
+                break;
+
+            case 4:
+                cout << "\n👋 Exiting. Thank you for using the library system!" << endl;
+                break;
+
+            default:
+                cout << "\n⚠️ Invalid option. Please choose between 1 and 4.\n" << endl;
+        }
+
+    } while (option != 4);  // Repeats until user chooses to exit
+
+    return 0;
 }
-
